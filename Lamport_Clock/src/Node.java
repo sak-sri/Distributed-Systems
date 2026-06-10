@@ -31,6 +31,8 @@ public class Node {
                                      it executes latch.countDown() which decrements value of latch by 1.
 
                                    */
+    private CountDownLatch serverConfirmationLatch;
+
     public Node(int port, String nodeName , int[] otherNodesPort) {
         this.myPort = port;
         this.nodeName = nodeName;
@@ -38,6 +40,7 @@ public class Node {
         outConnections=new HashMap<>();
         inConnections=new HashMap<>();
         latch=new CountDownLatch(otherNodesPort.length);
+        this.serverConfirmationLatch=new CountDownLatch(1);
 
     }
     /*
@@ -102,6 +105,7 @@ public class Node {
     public void serverSide() throws IOException {
         ServerSocket serverSocket = new ServerSocket(myPort);
         System.out.println(nodeName + " Listening on Port " +  myPort);
+        serverConfirmationLatch.countDown();
         while(true) {
             Socket clientSocket = serverSocket.accept();
             /*this line accepts
@@ -231,6 +235,11 @@ public class Node {
 
     public int getMyPort() {
         return myPort;
+    }
+
+    public void confirmServerCreation() throws InterruptedException {
+        serverConfirmationLatch.await();
+        System.out.println(nodeName + " Server Created");
     }
 
 }

@@ -14,10 +14,14 @@ public class Main {
             node2.startServer();
             node3.startServer();
             node4.startServer();
-           node5.startServer();
+            node5.startServer();
 
 
-           Thread.sleep(5000);
+           node1.confirmServerCreation();
+           node2.confirmServerCreation();
+           node3.confirmServerCreation();
+           node4.confirmServerCreation();
+           node5.confirmServerCreation();
 
            /* Might be possible that client tries
               to establish connection but server has
